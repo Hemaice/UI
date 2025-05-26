@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Eye } from "lucide-react";
 
 interface ProfileComponentProps {
@@ -13,15 +14,22 @@ interface ProfileComponentProps {
 
 const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
   const navigate = useNavigate();
+  const initials = currentUser.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').toUpperCase() : 'U';
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50">
           <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center">
-              <User className="h-10 w-10 text-white" />
-            </div>
+            <Avatar className="w-20 h-20">
+              {currentUser.profileImage ? (
+                <AvatarImage src={currentUser.profileImage} alt="Profile" className="w-20 h-20" />
+              ) : (
+                <AvatarFallback className="bg-blue-500 text-white w-20 h-20 text-2xl">
+                  {initials}
+                </AvatarFallback>
+              )}
+            </Avatar>
           </div>
           <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
           <p className="text-gray-600">{currentUser.email}</p>

@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, LogOut, Home, Users, BookOpen, UserCheck } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, LogOut, Home, Users, BookOpen, UserCheck, Camera } from "lucide-react";
 import { toast } from "sonner";
 
 interface FacultyNavbarProps {
@@ -19,12 +19,46 @@ interface FacultyNavbarProps {
 
 const FacultyNavbar = ({ currentPage }: FacultyNavbarProps) => {
   const navigate = useNavigate();
-  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('currentUser') || '{}'));
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     toast.success("Logged out successfully");
     navigate("/");
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageUrl = e.target?.result as string;
+        const updatedUser = { ...currentUser, profileImage: imageUrl };
+        
+        // Update current user state
+        setCurrentUser(updatedUser);
+        
+        // Update localStorage for currentUser
+        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+        
+        // Update the user in the faculty array
+        const faculty = JSON.parse(localStorage.getItem('faculty') || '[]');
+        const updatedFaculty = faculty.map((member: any) => 
+          member.id === currentUser.id 
+            ? { ...member, profileImage: imageUrl }
+            : member
+        );
+        localStorage.setItem('faculty', JSON.stringify(updatedFaculty));
+        
+        toast.success("Profile image updated successfully");
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerImageUpload = () => {
+    fileInputRef.current?.click();
   };
 
   const menuItems = [
@@ -62,13 +96,24 @@ const FacultyNavbar = ({ currentPage }: FacultyNavbarProps) => {
             </div>
           </div>
           <div className="flex items-center">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              accept="image/*"
+              className="hidden"
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-green-500 text-white">
-                      {initials}
-                    </AvatarFallback>
+                    {currentUser.profileImage ? (
+                      <AvatarImage src={currentUser.profileImage} alt="Profile" />
+                    ) : (
+                      <AvatarFallback className="bg-green-500 text-white">
+                        {initials}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -85,6 +130,10 @@ const FacultyNavbar = ({ currentPage }: FacultyNavbarProps) => {
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <User className="mr-2 h-4 w-4" />
                   <span>My Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={triggerImageUpload}>
+                  <Camera className="mr-2 h-4 w-4" />
+                  <span>Change Profile Picture</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
