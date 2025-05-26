@@ -1,10 +1,16 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { LogOut, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { User, LogOut, Home, Users, BookOpen, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 
 interface FacultyNavbarProps {
@@ -22,53 +28,65 @@ const FacultyNavbar = ({ currentPage }: FacultyNavbarProps) => {
   };
 
   const menuItems = [
-    { label: "Dashboard", path: "/faculty/dashboard" },
-    { label: "Students", path: "/faculty/students" },
-    { label: "Courses", path: "/faculty/courses" },
-    { label: "Assigned Students", path: "/faculty/assigned-students" }
+    { label: "Dashboard", path: "/faculty/dashboard", icon: Home },
+    { label: "Students", path: "/faculty/students", icon: Users },
+    { label: "Courses", path: "/faculty/courses", icon: BookOpen },
+    { label: "Assigned Students", path: "/faculty/assigned-students", icon: UserCheck }
   ];
 
+  const initials = currentUser.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').toUpperCase() : 'F';
+
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav className="bg-white shadow-lg border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
             <div className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-gray-900">Faculty Portal</h1>
+              <h1 className="text-xl font-bold text-green-600">Faculty Portal</h1>
             </div>
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                {menuItems.map((item) => (
+            <div className="hidden md:ml-6 md:flex md:space-x-8">
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                return (
                   <Button
                     key={item.path}
                     variant={currentPage === item.path ? "default" : "ghost"}
                     onClick={() => navigate(item.path)}
-                    className="text-sm"
+                    className="flex items-center gap-2"
                   >
+                    <Icon className="h-4 w-4" />
                     {item.label}
                   </Button>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
-          
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-700">Welcome, {currentUser.name}</span>
+          <div className="flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback>
-                      {currentUser.name?.charAt(0) || 'F'}
+                    <AvatarFallback className="bg-green-500 text-white">
+                      {initials}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuItem onClick={() => navigate("/faculty/profile")}>
+                <div className="flex items-center justify-start gap-2 p-2">
+                  <div className="flex flex-col space-y-1 leading-none">
+                    <p className="font-medium">{currentUser.name}</p>
+                    <p className="w-[200px] truncate text-sm text-muted-foreground">
+                      {currentUser.email}
+                    </p>
+                  </div>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
+                  <span>My Profile</span>
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>

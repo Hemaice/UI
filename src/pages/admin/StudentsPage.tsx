@@ -15,6 +15,8 @@ interface Student {
   name: string;
   email: string;
   department: string;
+  year: string;
+  mobile: string;
   password: string;
 }
 
@@ -29,7 +31,9 @@ const StudentsPage = () => {
     rollNumber: "",
     name: "",
     email: "",
-    department: ""
+    department: "",
+    year: "",
+    mobile: ""
   });
 
   // Load students from localStorage on component mount
@@ -45,7 +49,7 @@ const StudentsPage = () => {
   };
 
   const handleSubmit = () => {
-    if (!formData.rollNumber || !formData.name || !formData.email || !formData.department) {
+    if (!formData.rollNumber || !formData.name || !formData.email || !formData.department || !formData.year || !formData.mobile) {
       toast.error("Please fill all fields");
       return;
     }
@@ -59,7 +63,7 @@ const StudentsPage = () => {
     const updatedStudents = [...students, newStudent];
     setStudents(updatedStudents);
     updateStudentsStorage(updatedStudents);
-    setFormData({ rollNumber: "", name: "", email: "", department: "" });
+    setFormData({ rollNumber: "", name: "", email: "", department: "", year: "", mobile: "" });
     setIsAddDialogOpen(false);
     toast.success("Student added successfully");
   };
@@ -76,7 +80,7 @@ const StudentsPage = () => {
     updateStudentsStorage(updatedStudents);
     setIsEditDialogOpen(false);
     setSelectedStudent(null);
-    setFormData({ rollNumber: "", name: "", email: "", department: "" });
+    setFormData({ rollNumber: "", name: "", email: "", department: "", year: "", mobile: "" });
     toast.success("Student updated successfully");
   };
 
@@ -98,7 +102,9 @@ const StudentsPage = () => {
       rollNumber: student.rollNumber,
       name: student.name,
       email: student.email,
-      department: student.department
+      department: student.department,
+      year: student.year,
+      mobile: student.mobile
     });
     setIsEditDialogOpen(true);
   };
@@ -167,6 +173,24 @@ const StudentsPage = () => {
                     className="col-span-3"
                   />
                 </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="year" className="text-right">Year</Label>
+                  <Input
+                    id="year"
+                    value={formData.year}
+                    onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                    className="col-span-3"
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="mobile" className="text-right">Mobile</Label>
+                  <Input
+                    id="mobile"
+                    value={formData.mobile}
+                    onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                    className="col-span-3"
+                  />
+                </div>
               </div>
               <DialogFooter>
                 <Button onClick={handleSubmit}>Save Changes</Button>
@@ -193,6 +217,8 @@ const StudentsPage = () => {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Department</TableHead>
+                  <TableHead>Year</TableHead>
+                  <TableHead>Mobile</TableHead>
                   <TableHead>Password</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -204,6 +230,8 @@ const StudentsPage = () => {
                     <TableCell>{student.name}</TableCell>
                     <TableCell>{student.email}</TableCell>
                     <TableCell>{student.department}</TableCell>
+                    <TableCell>{student.year}</TableCell>
+                    <TableCell>{student.mobile}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span>{showPassword[student.id] ? student.password : "••••••"}</span>
@@ -248,6 +276,8 @@ const StudentsPage = () => {
                 <div><strong>Name:</strong> {selectedStudent.name}</div>
                 <div><strong>Email:</strong> {selectedStudent.email}</div>
                 <div><strong>Department:</strong> {selectedStudent.department}</div>
+                <div><strong>Year:</strong> {selectedStudent.year}</div>
+                <div><strong>Mobile:</strong> {selectedStudent.mobile}</div>
                 <div><strong>Password:</strong> {selectedStudent.password}</div>
               </div>
             )}
@@ -296,6 +326,24 @@ const StudentsPage = () => {
                   id="edit-department"
                   value={formData.department}
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="edit-year" className="text-right">Year</Label>
+                <Input
+                  id="edit-year"
+                  value={formData.year}
+                  onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="edit-mobile" className="text-right">Mobile</Label>
+                <Input
+                  id="edit-mobile"
+                  value={formData.mobile}
+                  onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                   className="col-span-3"
                 />
               </div>
