@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +21,7 @@ const FacultyNavbar = ({ currentPage }: FacultyNavbarProps) => {
   const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('currentUser') || '{}'));
 
   // Listen for profile updates
-  useState(() => {
+  useEffect(() => {
     const handleStorageChange = () => {
       const updatedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       setCurrentUser(updatedUser);
@@ -35,13 +35,13 @@ const FacultyNavbar = ({ currentPage }: FacultyNavbarProps) => {
       if (JSON.stringify(updatedUser) !== JSON.stringify(currentUser)) {
         setCurrentUser(updatedUser);
       }
-    }, 1000);
+    }, 500);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       clearInterval(interval);
     };
-  }, []);
+  }, [currentUser]);
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');

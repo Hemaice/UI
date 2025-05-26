@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -20,7 +20,7 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
   const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('currentUser') || '{}'));
 
   // Listen for profile updates
-  useState(() => {
+  useEffect(() => {
     const handleStorageChange = () => {
       const updatedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       setCurrentUser(updatedUser);
@@ -34,13 +34,13 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
       if (JSON.stringify(updatedUser) !== JSON.stringify(currentUser)) {
         setCurrentUser(updatedUser);
       }
-    }, 1000);
+    }, 500);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       clearInterval(interval);
     };
-  }, []);
+  }, [currentUser]);
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
