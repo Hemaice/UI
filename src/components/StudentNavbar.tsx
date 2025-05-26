@@ -17,12 +17,17 @@ interface StudentNavbarProps {
 
 const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('currentUser') || '{}'));
+  const [currentUser, setCurrentUser] = useState(() => {
+    const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    console.log('Initial user data:', user);
+    return user;
+  });
 
   // Listen for profile updates
   useEffect(() => {
     const handleStorageChange = () => {
       const updatedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      console.log('Updated user data:', updatedUser);
       setCurrentUser(updatedUser);
     };
 
@@ -53,7 +58,9 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
     { label: "Enrolled Courses", path: "/student/enrolled-courses", icon: Users }
   ];
 
-  const initials = currentUser.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').toUpperCase() : 'S';
+  const userName = currentUser?.name || 'Student';
+  const userEmail = currentUser?.email || 'student@example.com';
+  const initials = userName.split(' ').map((n: string) => n[0]).join('').toUpperCase();
 
   return (
     <nav className="bg-white shadow-lg border-b">
@@ -83,12 +90,12 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
           <div className="flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    {currentUser.profileImage ? (
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Avatar className="h-10 w-10">
+                    {currentUser?.profileImage ? (
                       <AvatarImage src={currentUser.profileImage} alt="Profile" />
                     ) : (
-                      <AvatarFallback className="bg-blue-500 text-white">
+                      <AvatarFallback className="bg-blue-500 text-white text-sm font-semibold">
                         {initials}
                       </AvatarFallback>
                     )}
@@ -98,9 +105,9 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{currentUser.name}</p>
+                    <p className="font-medium">{userName}</p>
                     <p className="w-[200px] truncate text-sm text-muted-foreground">
-                      {currentUser.email}
+                      {userEmail}
                     </p>
                   </div>
                 </div>
