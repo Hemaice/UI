@@ -222,50 +222,76 @@ export default function ViewProfile() {
     </Card>
   );
 
-  const renderWorkExperience = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Work Experience</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 mb-1">Organization Name</h4>
-            <p className="text-lg">{currentUser.organizationName || "Not specified"}</p>
-          </div>
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 mb-1">Duration</h4>
-            <p className="text-lg">
-              {currentUser.workStartYear && currentUser.workEndYear 
-                ? `${currentUser.workStartYear} - ${currentUser.workEndYear}`
-                : "Not specified"}
-            </p>
-          </div>
-        </div>
+  const renderWorkExperience = () => {
+    const workExperiences = currentUser.workExperiences || [];
 
-        {currentUser.workDescription && (
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 mb-1">Description</h4>
-            <p className="text-lg">{currentUser.workDescription}</p>
-          </div>
-        )}
+    // Fallback for old data structure
+    if (workExperiences.length === 0 && (currentUser.organizationName || currentUser.workStartYear)) {
+      workExperiences.push({
+        organizationName: currentUser.organizationName,
+        workStartYear: currentUser.workStartYear,
+        workEndYear: currentUser.workEndYear,
+        workDescription: currentUser.workDescription,
+        achievements: currentUser.achievements,
+        researchDetails: currentUser.researchDetails
+      });
+    }
 
-        {currentUser.achievements && (
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 mb-1">Achievements</h4>
-            <p className="text-lg">{currentUser.achievements}</p>
-          </div>
-        )}
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Work Experience</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {workExperiences.length === 0 ? (
+            <p className="text-gray-500">No work experience added yet.</p>
+          ) : (
+            workExperiences.map((experience: any, index: number) => (
+              <div key={index} className="border-b pb-6 last:border-b-0 last:pb-0">
+                <h3 className="text-lg font-semibold mb-4">Experience {index + 1}</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500 mb-1">Organization Name</h4>
+                    <p className="text-lg">{experience.organizationName || "Not specified"}</p>
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500 mb-1">Duration</h4>
+                    <p className="text-lg">
+                      {experience.workStartYear && experience.workEndYear 
+                        ? `${experience.workStartYear} - ${experience.workEndYear}`
+                        : "Not specified"}
+                    </p>
+                  </div>
+                </div>
 
-        {currentUser.researchDetails && (
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 mb-1">Research Details</h4>
-            <p className="text-lg">{currentUser.researchDetails}</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
+                {experience.workDescription && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium text-gray-500 mb-1">Description</h4>
+                    <p className="text-lg">{experience.workDescription}</p>
+                  </div>
+                )}
+
+                {experience.achievements && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium text-gray-500 mb-1">Achievements</h4>
+                    <p className="text-lg">{experience.achievements}</p>
+                  </div>
+                )}
+
+                {experience.researchDetails && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-500 mb-1">Research Details</h4>
+                    <p className="text-lg">{experience.researchDetails}</p>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">

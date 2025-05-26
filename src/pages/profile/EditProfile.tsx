@@ -480,76 +480,126 @@ export default function EditProfile() {
     </Card>
   );
 
-  const renderWorkExperience = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Briefcase className="h-5 w-5" />
-          Work Experience
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="organizationName">Organization Name *</Label>
-            <Input
-              id="organizationName"
-              value={formData.organizationName || ""}
-              onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
-              {...getInputProps()}
-            />
-          </div>
+  const renderWorkExperience = () => {
+    const workExperiences = formData.workExperiences || [{}];
 
-          <div className="space-y-2">
-            <Label htmlFor="workStartYear">Start Year *</Label>
-            <Input
-              id="workStartYear"
-              value={formData.workStartYear || ""}
-              onChange={(e) => setFormData({ ...formData, workStartYear: e.target.value })}
-              {...getInputProps()}
-            />
-          </div>
+    const addExperience = () => {
+      const newExperiences = [...workExperiences, {}];
+      setFormData({ ...formData, workExperiences: newExperiences });
+    };
 
-          <div className="space-y-2">
-            <Label htmlFor="workEndYear">End Year *</Label>
-            <Input
-              id="workEndYear"
-              value={formData.workEndYear || ""}
-              onChange={(e) => setFormData({ ...formData, workEndYear: e.target.value })}
-              {...getInputProps()}
-            />
-          </div>
-        </div>
+    const deleteExperience = (index: number) => {
+      const newExperiences = workExperiences.filter((_, i) => i !== index);
+      setFormData({ ...formData, workExperiences: newExperiences });
+    };
 
-        <div className="space-y-2">
-          <Label htmlFor="workDescription">Description *</Label>
-          <Textarea
-            id="workDescription"
-            value={formData.workDescription || ""}
-            onChange={(e) => setFormData({ ...formData, workDescription: e.target.value })}
-          />
-        </div>
+    const updateExperience = (index: number, field: string, value: string) => {
+      const newExperiences = [...workExperiences];
+      newExperiences[index] = { ...newExperiences[index], [field]: value };
+      setFormData({ ...formData, workExperiences: newExperiences });
+    };
 
-        <div className="space-y-2">
-          <Label htmlFor="achievements">Achievements</Label>
-          <Textarea
-            id="achievements"
-            value={formData.achievements || ""}
-            onChange={(e) => setFormData({ ...formData, achievements: e.target.value })}
-          />
-        </div>
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Briefcase className="h-5 w-5" />
+              Work Experience
+            </div>
+            <Button 
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={addExperience}
+              className="flex items-center gap-2"
+            >
+              <span className="text-lg">+</span>
+              Add Experience
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-8">
+          {workExperiences.map((experience: any, index: number) => (
+            <div key={index} className="border rounded-lg p-4 space-y-6 relative">
+              {workExperiences.length > 1 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => deleteExperience(index)}
+                  className="absolute top-2 right-2 text-red-500 hover:text-red-700 hover:bg-red-50"
+                >
+                  <span className="text-lg">×</span>
+                </Button>
+              )}
+              
+              <h3 className="text-lg font-semibold">Experience {index + 1}</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor={`organizationName-${index}`}>Organization Name *</Label>
+                  <Input
+                    id={`organizationName-${index}`}
+                    value={experience.organizationName || ""}
+                    onChange={(e) => updateExperience(index, 'organizationName', e.target.value)}
+                    {...getInputProps()}
+                  />
+                </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="researchDetails">Research Details</Label>
-          <Textarea
-            id="researchDetails"
-            value={formData.researchDetails || ""}
-            onChange={(e) => setFormData({ ...formData, researchDetails: e.target.value })}
-          />
-        </div>
-      </CardContent>
-    </Card>
-  );
+                <div className="space-y-2">
+                  <Label htmlFor={`workStartYear-${index}`}>Start Year *</Label>
+                  <Input
+                    id={`workStartYear-${index}`}
+                    value={experience.workStartYear || ""}
+                    onChange={(e) => updateExperience(index, 'workStartYear', e.target.value)}
+                    {...getInputProps()}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`workEndYear-${index}`}>End Year *</Label>
+                  <Input
+                    id={`workEndYear-${index}`}
+                    value={experience.workEndYear || ""}
+                    onChange={(e) => updateExperience(index, 'workEndYear', e.target.value)}
+                    {...getInputProps()}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor={`workDescription-${index}`}>Description *</Label>
+                <Textarea
+                  id={`workDescription-${index}`}
+                  value={experience.workDescription || ""}
+                  onChange={(e) => updateExperience(index, 'workDescription', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor={`achievements-${index}`}>Achievements</Label>
+                <Textarea
+                  id={`achievements-${index}`}
+                  value={experience.achievements || ""}
+                  onChange={(e) => updateExperience(index, 'achievements', e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor={`researchDetails-${index}`}>Research Details</Label>
+                <Textarea
+                  id={`researchDetails-${index}`}
+                  value={experience.researchDetails || ""}
+                  onChange={(e) => updateExperience(index, 'researchDetails', e.target.value)}
+                />
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    );
+  };
 
   const renderContent = () => {
     switch (activeSection) {
