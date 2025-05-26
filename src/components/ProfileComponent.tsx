@@ -1,8 +1,9 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
+import { User, Eye } from "lucide-react";
 
 interface ProfileComponentProps {
   userType: 'student' | 'faculty';
@@ -17,13 +18,13 @@ const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
     <div className="max-w-4xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50">
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center">
+              <User className="h-10 w-10 text-white" />
+            </div>
+          </div>
           <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
           <p className="text-gray-600">{currentUser.email}</p>
-          {userType === 'student' ? (
-            <p className="text-sm text-gray-500">Roll Number: {currentUser.rollNumber}</p>
-          ) : (
-            <p className="text-sm text-gray-500">Faculty ID: {currentUser.facultyId}</p>
-          )}
         </CardHeader>
 
         <CardContent className="p-8">
@@ -79,8 +80,8 @@ const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
               className="flex items-center gap-2"
               onClick={() => navigate('/profile/edit')}
             >
-              <Edit className="h-4 w-4" />
-              Edit Profile
+              <Eye className="h-4 w-4" />
+              View Details
             </Button>
           </div>
         </CardContent>
