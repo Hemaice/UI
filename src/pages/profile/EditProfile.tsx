@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,16 +30,16 @@ export default function EditProfile() {
   const handleSave = () => {
     const storageKey = currentUser.role === 'student' ? 'students' : 'faculty';
     const users = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    
+
     const updatedUsers = users.map((user: any) => 
       user.id === currentUser.id 
         ? { ...user, ...formData }
         : user
     );
-    
+
     localStorage.setItem(storageKey, JSON.stringify(updatedUsers));
     localStorage.setItem('currentUser', JSON.stringify({ ...currentUser, ...formData }));
-    
+
     toast.success("Profile updated successfully");
     navigate('/profile');
   };
@@ -63,6 +62,17 @@ export default function EditProfile() {
         { id: 'work', label: 'Work Experience', icon: Briefcase }
       ];
 
+    const getInputProps = () => {
+        return {
+            readOnly: false,
+            style: {
+                backgroundColor: 'white',
+                cursor: 'auto',
+                opacity: 1,
+            },
+        };
+    };
+
   const renderBasicDetails = () => (
     <Card>
       <CardHeader>
@@ -72,8 +82,8 @@ export default function EditProfile() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        
-        
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="name">Name *</Label>
@@ -83,7 +93,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
-          
+
           {isStudent ? (
             <div className="space-y-2">
               <Label htmlFor="rollNumber">Roll Number *</Label>
@@ -103,17 +113,18 @@ export default function EditProfile() {
               />
             </div>
           )}
-          
+
           <div className="space-y-2">
             <Label htmlFor="email">Email *</Label>
             <Input
-              id="email"
-              type="email"
-              value={formData.email || ""}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
+                id="email"
+                type="email"
+                value={formData.email || ""}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                {...getInputProps()}
+              />
           </div>
-          
+
           {isStudent && (
             <>
               <div className="space-y-2">
@@ -124,7 +135,7 @@ export default function EditProfile() {
                   onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="motherName">Mother Name</Label>
                 <Input
@@ -133,7 +144,7 @@ export default function EditProfile() {
                   onChange={(e) => setFormData({ ...formData, motherName: e.target.value })}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="firstGraduate">First Graduate</Label>
                 <Input
@@ -144,7 +155,7 @@ export default function EditProfile() {
               </div>
             </>
           )}
-          
+
           {!isStudent && (
             <>
               <div className="space-y-2">
@@ -155,7 +166,7 @@ export default function EditProfile() {
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="experience">Experience</Label>
                 <Input
@@ -164,7 +175,7 @@ export default function EditProfile() {
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="designation">Designation</Label>
                 <Input
@@ -175,16 +186,17 @@ export default function EditProfile() {
               </div>
             </>
           )}
-          
+
           <div className="space-y-2">
             <Label htmlFor="mobile">Mobile Number</Label>
             <Input
-              id="mobile"
-              value={formData.mobile || ""}
-              onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-            />
+                id="mobile"
+                value={formData.mobile || ""}
+                onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
+                {...getInputProps()}
+              />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="dob">Date of Birth</Label>
             <Input
@@ -194,7 +206,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="gender">Gender</Label>
             <Input
@@ -203,7 +215,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="bloodGroup">Blood Group</Label>
             <Input
@@ -212,7 +224,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="aadharNumber">Aadhar Number</Label>
             <Input
@@ -221,7 +233,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, aadharNumber: e.target.value })}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="nationality">Nationality</Label>
             <Input
@@ -231,7 +243,7 @@ export default function EditProfile() {
             />
           </div>
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="address">Address</Label>
           <Textarea
@@ -265,7 +277,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="degree">Degree *</Label>
               <Input
@@ -274,7 +286,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="program">Program *</Label>
               <Input
@@ -283,7 +295,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, program: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="startYear">Start Year *</Label>
               <Input
@@ -292,7 +304,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, startYear: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="expectedGraduation">Expected Graduation Year *</Label>
               <Input
@@ -301,7 +313,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, expectedGraduation: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="cgpa">CGPA or Percentage *</Label>
               <Input
@@ -310,7 +322,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, cgpa: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="githubProfile">Github Profile</Label>
               <Input
@@ -319,7 +331,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, githubProfile: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="linkedinProfile">LinkedIn Profile</Label>
               <Input
@@ -330,7 +342,7 @@ export default function EditProfile() {
             </div>
           </div>
         </div>
-        
+
         {/* 10th Details */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">10th Standard</h3>
@@ -343,7 +355,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, school10: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="startYear10">Start Year</Label>
               <Input
@@ -352,7 +364,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, startYear10: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="endYear10">End Year</Label>
               <Input
@@ -361,7 +373,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, endYear10: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="percentage10">Percentage</Label>
               <Input
@@ -370,7 +382,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, percentage10: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="board10">Board of Education</Label>
               <Input
@@ -381,7 +393,7 @@ export default function EditProfile() {
             </div>
           </div>
         </div>
-        
+
         {/* 12th Details */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">12th Standard / Diploma</h3>
@@ -394,7 +406,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, school12: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="startYear12">Start Year</Label>
               <Input
@@ -403,7 +415,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, startYear12: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="endYear12">End Year</Label>
               <Input
@@ -412,7 +424,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, endYear12: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="percentage12">Percentage</Label>
               <Input
@@ -421,7 +433,7 @@ export default function EditProfile() {
                 onChange={(e) => setFormData({ ...formData, percentage12: e.target.value })}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="board12">Board of Education</Label>
               <Input
@@ -454,7 +466,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="workStartYear">Start Year *</Label>
             <Input
@@ -463,7 +475,7 @@ export default function EditProfile() {
               onChange={(e) => setFormData({ ...formData, workStartYear: e.target.value })}
             />
           </div>
-          
+
           <div className="space-y-2">
             <Label htmlFor="workEndYear">End Year *</Label>
             <Input
@@ -473,7 +485,7 @@ export default function EditProfile() {
             />
           </div>
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="workDescription">Description *</Label>
           <Textarea
@@ -482,7 +494,7 @@ export default function EditProfile() {
             onChange={(e) => setFormData({ ...formData, workDescription: e.target.value })}
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="achievements">Achievements</Label>
           <Textarea
@@ -491,7 +503,7 @@ export default function EditProfile() {
             onChange={(e) => setFormData({ ...formData, achievements: e.target.value })}
           />
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="researchDetails">Research Details</Label>
           <Textarea
@@ -529,7 +541,7 @@ export default function EditProfile() {
           <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
           <p className="text-gray-600">Update your profile information</p>
         </div>
-        
+
         <div className="flex gap-6">
           {/* Vertical Sidebar */}
           <div className="w-64 bg-white rounded-lg shadow p-4">
@@ -553,11 +565,11 @@ export default function EditProfile() {
               })}
             </nav>
           </div>
-          
+
           {/* Main Content */}
           <div className="flex-1">
             {renderContent()}
-            
+
             <div className="mt-6 flex justify-end gap-4">
               <Button variant="outline" onClick={() => navigate('/profile')}>
                 Cancel
