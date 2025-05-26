@@ -79,7 +79,7 @@ const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
             <Button 
               variant="outline"
               className="flex items-center gap-2"
-              onClick={() => navigate('/profile/edit')}
+              onClick={() => navigate('/profile/edit?mode=view')}
             >
               <Eye className="h-4 w-4" />
               View Details

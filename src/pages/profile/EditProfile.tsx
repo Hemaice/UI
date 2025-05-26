@@ -91,6 +91,7 @@ export default function EditProfile() {
               id="name"
               value={formData.name || ""}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -101,6 +102,7 @@ export default function EditProfile() {
                 id="rollNumber"
                 value={formData.rollNumber || ""}
                 onChange={(e) => setFormData({ ...formData, rollNumber: e.target.value })}
+                {...getInputProps()}
               />
             </div>
           ) : (
@@ -110,6 +112,7 @@ export default function EditProfile() {
                 id="facultyId"
                 value={formData.facultyId || ""}
                 onChange={(e) => setFormData({ ...formData, facultyId: e.target.value })}
+                {...getInputProps()}
               />
             </div>
           )}
@@ -133,6 +136,7 @@ export default function EditProfile() {
                   id="fatherName"
                   value={formData.fatherName || ""}
                   onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
+                  {...getInputProps()}
                 />
               </div>
 
@@ -142,6 +146,7 @@ export default function EditProfile() {
                   id="motherName"
                   value={formData.motherName || ""}
                   onChange={(e) => setFormData({ ...formData, motherName: e.target.value })}
+                  {...getInputProps()}
                 />
               </div>
 
@@ -151,6 +156,7 @@ export default function EditProfile() {
                   id="firstGraduate"
                   value={formData.firstGraduate || ""}
                   onChange={(e) => setFormData({ ...formData, firstGraduate: e.target.value })}
+                  {...getInputProps()}
                 />
               </div>
             </>
@@ -164,6 +170,7 @@ export default function EditProfile() {
                   id="department"
                   value={formData.department || ""}
                   onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                  {...getInputProps()}
                 />
               </div>
 
@@ -173,6 +180,7 @@ export default function EditProfile() {
                   id="experience"
                   value={formData.experience || ""}
                   onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+                  {...getInputProps()}
                 />
               </div>
 
@@ -182,6 +190,7 @@ export default function EditProfile() {
                   id="designation"
                   value={formData.designation || ""}
                   onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
+                  {...getInputProps()}
                 />
               </div>
             </>
@@ -204,6 +213,7 @@ export default function EditProfile() {
               type="date"
               value={formData.dob || ""}
               onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -213,6 +223,7 @@ export default function EditProfile() {
               id="gender"
               value={formData.gender || ""}
               onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -222,6 +233,7 @@ export default function EditProfile() {
               id="bloodGroup"
               value={formData.bloodGroup || ""}
               onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -231,6 +243,7 @@ export default function EditProfile() {
               id="aadharNumber"
               value={formData.aadharNumber || ""}
               onChange={(e) => setFormData({ ...formData, aadharNumber: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -240,6 +253,7 @@ export default function EditProfile() {
               id="nationality"
               value={formData.nationality || ""}
               onChange={(e) => setFormData({ ...formData, nationality: e.target.value })}
+              {...getInputProps()}
             />
           </div>
         </div>
@@ -275,6 +289,7 @@ export default function EditProfile() {
                 id="institution"
                 value={formData.institution || ""}
                 onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -284,6 +299,7 @@ export default function EditProfile() {
                 id="degree"
                 value={formData.degree || ""}
                 onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -293,6 +309,7 @@ export default function EditProfile() {
                 id="program"
                 value={formData.program || ""}
                 onChange={(e) => setFormData({ ...formData, program: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -302,6 +319,7 @@ export default function EditProfile() {
                 id="startYear"
                 value={formData.startYear || ""}
                 onChange={(e) => setFormData({ ...formData, startYear: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -311,6 +329,7 @@ export default function EditProfile() {
                 id="expectedGraduation"
                 value={formData.expectedGraduation || ""}
                 onChange={(e) => setFormData({ ...formData, expectedGraduation: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -320,6 +339,7 @@ export default function EditProfile() {
                 id="cgpa"
                 value={formData.cgpa || ""}
                 onChange={(e) => setFormData({ ...formData, cgpa: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -329,6 +349,7 @@ export default function EditProfile() {
                 id="githubProfile"
                 value={formData.githubProfile || ""}
                 onChange={(e) => setFormData({ ...formData, githubProfile: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -338,6 +359,7 @@ export default function EditProfile() {
                 id="linkedinProfile"
                 value={formData.linkedinProfile || ""}
                 onChange={(e) => setFormData({ ...formData, linkedinProfile: e.target.value })}
+                {...getInputProps()}
               />
             </div>
           </div>
@@ -353,6 +375,7 @@ export default function EditProfile() {
                 id="school10"
                 value={formData.school10 || ""}
                 onChange={(e) => setFormData({ ...formData, school10: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -362,6 +385,7 @@ export default function EditProfile() {
                 id="startYear10"
                 value={formData.startYear10 || ""}
                 onChange={(e) => setFormData({ ...formData, startYear10: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -371,6 +395,7 @@ export default function EditProfile() {
                 id="endYear10"
                 value={formData.endYear10 || ""}
                 onChange={(e) => setFormData({ ...formData, endYear10: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -380,6 +405,7 @@ export default function EditProfile() {
                 id="percentage10"
                 value={formData.percentage10 || ""}
                 onChange={(e) => setFormData({ ...formData, percentage10: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -389,6 +415,7 @@ export default function EditProfile() {
                 id="board10"
                 value={formData.board10 || ""}
                 onChange={(e) => setFormData({ ...formData, board10: e.target.value })}
+                {...getInputProps()}
               />
             </div>
           </div>
@@ -404,6 +431,7 @@ export default function EditProfile() {
                 id="school12"
                 value={formData.school12 || ""}
                 onChange={(e) => setFormData({ ...formData, school12: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -413,6 +441,7 @@ export default function EditProfile() {
                 id="startYear12"
                 value={formData.startYear12 || ""}
                 onChange={(e) => setFormData({ ...formData, startYear12: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -422,6 +451,7 @@ export default function EditProfile() {
                 id="endYear12"
                 value={formData.endYear12 || ""}
                 onChange={(e) => setFormData({ ...formData, endYear12: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -431,6 +461,7 @@ export default function EditProfile() {
                 id="percentage12"
                 value={formData.percentage12 || ""}
                 onChange={(e) => setFormData({ ...formData, percentage12: e.target.value })}
+                {...getInputProps()}
               />
             </div>
 
@@ -440,6 +471,7 @@ export default function EditProfile() {
                 id="board12"
                 value={formData.board12 || ""}
                 onChange={(e) => setFormData({ ...formData, board12: e.target.value })}
+                {...getInputProps()}
               />
             </div>
           </div>
@@ -464,6 +496,7 @@ export default function EditProfile() {
               id="organizationName"
               value={formData.organizationName || ""}
               onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -473,6 +506,7 @@ export default function EditProfile() {
               id="workStartYear"
               value={formData.workStartYear || ""}
               onChange={(e) => setFormData({ ...formData, workStartYear: e.target.value })}
+              {...getInputProps()}
             />
           </div>
 
@@ -482,6 +516,7 @@ export default function EditProfile() {
               id="workEndYear"
               value={formData.workEndYear || ""}
               onChange={(e) => setFormData({ ...formData, workEndYear: e.target.value })}
+              {...getInputProps()}
             />
           </div>
         </div>
