@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User, Edit } from "lucide-react";
+import { Edit } from "lucide-react";
 
 interface ProfileComponentProps {
   userType: 'student' | 'faculty';
@@ -13,19 +12,11 @@ interface ProfileComponentProps {
 
 const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
   const navigate = useNavigate();
-  const initials = currentUser.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').toUpperCase() : 'U';
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="flex justify-center mb-4">
-            <Avatar className="h-24 w-24">
-              <AvatarFallback className="bg-blue-500 text-white text-2xl">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-          </div>
           <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
           <p className="text-gray-600">{currentUser.email}</p>
           {userType === 'student' ? (
@@ -83,16 +74,7 @@ const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
             </div>
           </div>
 
-          <div className="flex justify-center gap-4">
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={() => {/* View profile functionality can be added here */}}
-            >
-              <User className="h-4 w-4" />
-              View Profile
-            </Button>
-
+          <div className="flex justify-center">
             <Button 
               className="flex items-center gap-2"
               onClick={() => navigate('/profile/edit')}
