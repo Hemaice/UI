@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, LogOut, Home, BookOpen, Users } from "lucide-react";
+import { useState } from "react";
 
 interface StudentNavbarProps {
   currentPage?: string;
