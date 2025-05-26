@@ -1,10 +1,11 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Eye } from "lucide-react";
+import { User, Eye, Camera } from "lucide-react";
+import { useRef } from "react";
+import { toast } from "sonner";
 
 interface ProfileComponentProps {
   userType: 'student' | 'faculty';
@@ -12,16 +13,46 @@ interface ProfileComponentProps {
   onUpdate: (updatedUser: any) => void;
 }
 
-const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
+const ProfileComponent = ({ userType, currentUser, onUpdate }: ProfileComponentProps) => {
   const navigate = useNavigate();
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const initials = currentUser.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').toUpperCase() : 'U';
+
+  const handleImageChange = async (e: any) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      // Simulate image upload and update state
+      // Replace with your actual upload logic
+      await new Promise(resolve => setTimeout(resolve, 1500)); 
+
+      const imageUrl = URL.createObjectURL(file);
+      const updatedUser = { ...currentUser, profileImage: imageUrl };
+      onUpdate(updatedUser);
+
+      toast.success("Profile picture updated successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Failed to update profile picture.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="flex justify-center mb-4">
-            <Avatar className="w-20 h-20">
+          <div className="flex justify-center mb-4 relative">
+            <Avatar className="w-20 h-20 cursor-pointer" onClick={handleAvatarClick}>
               {currentUser.profileImage ? (
                 <AvatarImage src={currentUser.profileImage} alt="Profile" className="w-20 h-20" />
               ) : (
@@ -30,6 +61,23 @@ const ProfileComponent = ({ userType, currentUser }: ProfileComponentProps) => {
                 </AvatarFallback>
               )}
             </Avatar>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="absolute bottom-0 right-0 rounded-full"
+                onClick={handleAvatarClick}
+                disabled={isUploading}
+              >
+                <Camera className="h-4 w-4" />
+                <span className="sr-only">Upload</span>
+            </Button>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+              ref={fileInputRef}
+            />
           </div>
           <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
           <p className="text-gray-600">{currentUser.email}</p>

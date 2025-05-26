@@ -1,6 +1,4 @@
-
-import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,8 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, LogOut, Home, BookOpen, Users, Camera } from "lucide-react";
-import { toast } from "sonner";
+import { User, LogOut, Home, BookOpen, Users } from "lucide-react";
 
 interface StudentNavbarProps {
   currentPage?: string;
@@ -20,45 +17,10 @@ interface StudentNavbarProps {
 const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('currentUser') || '{}'));
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
-    toast.success("Logged out successfully");
     navigate("/");
-  };
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageUrl = e.target?.result as string;
-        const updatedUser = { ...currentUser, profileImage: imageUrl };
-        
-        // Update current user state
-        setCurrentUser(updatedUser);
-        
-        // Update localStorage for currentUser
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-        
-        // Update the user in the students array
-        const students = JSON.parse(localStorage.getItem('students') || '[]');
-        const updatedStudents = students.map((student: any) => 
-          student.id === currentUser.id 
-            ? { ...student, profileImage: imageUrl }
-            : student
-        );
-        localStorage.setItem('students', JSON.stringify(updatedStudents));
-        
-        toast.success("Profile image updated successfully");
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const triggerImageUpload = () => {
-    fileInputRef.current?.click();
   };
 
   const menuItems = [
@@ -95,13 +57,6 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
             </div>
           </div>
           <div className="flex items-center">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              accept="image/*"
-              className="hidden"
-            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -126,18 +81,14 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
                   </div>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
                   <User className="mr-2 h-4 w-4" />
-                  <span>My Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={triggerImageUpload}>
-                  <Camera className="mr-2 h-4 w-4" />
-                  <span>Change Profile Picture</span>
+                  My Profile
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
