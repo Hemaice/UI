@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
-import { User, GraduationCap, Briefcase, ArrowLeft } from "lucide-react";
+import { User, GraduationCap, Briefcase, ArrowLeft, Camera } from "lucide-react";
 import StudentNavbar from "@/components/StudentNavbar";
 import FacultyNavbar from "@/components/FacultyNavbar";
 
@@ -16,6 +16,8 @@ export default function EditProfile() {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [activeSection, setActiveSection] = useState('basic');
   const [formData, setFormData] = useState<any>({});
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -26,6 +28,28 @@ export default function EditProfile() {
     setCurrentUser(user);
     setFormData(user);
   }, [navigate]);
+
+  const handleImageChange = async (e: any) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500)); 
+      const imageUrl = URL.createObjectURL(file);
+      setFormData({ ...formData, profileImage: imageUrl });
+      toast.success("Profile picture updated!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Failed to update profile picture.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click();
+  };
 
   const handleSave = () => {
     const storageKey = currentUser.role === 'student' ? 'students' : 'faculty';
@@ -82,7 +106,37 @@ export default function EditProfile() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-
+        {/* Profile Image Upload */}
+        <div className="flex justify-center mb-6">
+          <div className="relative">
+            <Avatar className="w-24 h-24 cursor-pointer" onClick={handleAvatarClick}>
+              {formData.profileImage ? (
+                <AvatarImage src={formData.profileImage} alt="Profile" className="w-24 h-24" />
+              ) : (
+                <AvatarFallback className="bg-blue-500 text-white w-24 h-24 text-2xl">
+                  {initials}
+                </AvatarFallback>
+              )}
+            </Avatar>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute -bottom-1 -right-1 rounded-full bg-white shadow-md hover:bg-gray-50 w-8 h-8"
+              onClick={handleAvatarClick}
+              disabled={isUploading}
+            >
+              <Camera className="h-4 w-4" />
+              <span className="sr-only">Upload</span>
+            </Button>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="hidden"
+              ref={fileInputRef}
+            />
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">

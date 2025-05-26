@@ -1,11 +1,8 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Eye, Camera } from "lucide-react";
-import { useRef } from "react";
-import { toast } from "sonner";
+import { User, Eye } from "lucide-react";
 
 interface ProfileComponentProps {
   userType: 'student' | 'faculty';
@@ -15,71 +12,23 @@ interface ProfileComponentProps {
 
 const ProfileComponent = ({ userType, currentUser, onUpdate }: ProfileComponentProps) => {
   const navigate = useNavigate();
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const initials = currentUser.name ? currentUser.name.split(' ').map((n: string) => n[0]).join('').toUpperCase() : 'U';
-
-  const handleImageChange = async (e: any) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    try {
-      // Simulate image upload and update state
-      // Replace with your actual upload logic
-      await new Promise(resolve => setTimeout(resolve, 1500)); 
-
-      const imageUrl = URL.createObjectURL(file);
-      const updatedUser = { ...currentUser, profileImage: imageUrl };
-      onUpdate(updatedUser);
-
-      toast.success("Profile picture updated successfully!");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error("Failed to update profile picture.");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="flex justify-center mb-4 relative inline-block">
-            <div className="relative">
-              <Avatar className="w-20 h-20 cursor-pointer" onClick={handleAvatarClick}>
-                {currentUser.profileImage ? (
-                  <AvatarImage src={currentUser.profileImage} alt="Profile" className="w-20 h-20" />
-                ) : (
-                  <AvatarFallback className="bg-blue-500 text-white w-20 h-20 text-2xl">
-                    {initials}
-                  </AvatarFallback>
-                )}
-              </Avatar>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute -bottom-1 -right-1 rounded-full bg-white shadow-md hover:bg-gray-50 w-8 h-8"
-                onClick={handleAvatarClick}
-                disabled={isUploading}
-              >
-                <Camera className="h-4 w-4" />
-                <span className="sr-only">Upload</span>
-              </Button>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-                ref={fileInputRef}
-              />
-            </div>
+          <div className="flex justify-center mb-4">
+            <Avatar className="w-20 h-20">
+              {currentUser.profileImage ? (
+                <AvatarImage src={currentUser.profileImage} alt="Profile" className="w-20 h-20" />
+              ) : (
+                <AvatarFallback className="bg-blue-500 text-white w-20 h-20 text-2xl">
+                  {initials}
+                </AvatarFallback>
+              )}
+            </Avatar>
           </div>
           <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
           <p className="text-gray-600">{currentUser.email}</p>
