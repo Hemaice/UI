@@ -1,21 +1,20 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import StudentLogin from "./pages/auth/StudentLogin";
+import FacultyLogin from "./pages/auth/FacultyLogin";
+import StudentDashboard from "./pages/student/StudentDashboard";
+import FacultyDashboard from "./pages/faculty/FacultyDashboard";
+import DashboardPage from "./pages/admin/DashboardPage";
+import StudentsPage from "./pages/admin/StudentsPage";
+import FacultyPage from "./pages/admin/FacultyPage";
+import CoursesPage from "./pages/admin/CoursesPage";
+import AssignStudentsPage from "./pages/admin/AssignStudentsPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import NotFound from "./pages/NotFound";
-import AdminDashboard from "./pages/AdminDashboard";
-import DashboardPage from "./pages/DashboardPage";
-import StudentsPage from "./pages/StudentsPage";
-import FacultyPage from "./pages/FacultyPage";
-import CoursesPage from "./pages/CoursesPage";
-import AssignStudentsPage from "./pages/AssignStudentsPage";
-import FacultyLogin from "./pages/FacultyLogin";
-import StudentLogin from "./pages/StudentLogin";
-import FacultyDashboard from "./pages/FacultyDashboard";
-import StudentDashboard from "./pages/StudentDashboard";
 
 const queryClient = new QueryClient();
 
