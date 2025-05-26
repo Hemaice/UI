@@ -19,6 +19,29 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(() => JSON.parse(localStorage.getItem('currentUser') || '{}'));
 
+  // Listen for profile updates
+  useState(() => {
+    const handleStorageChange = () => {
+      const updatedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      setCurrentUser(updatedUser);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for manual updates within the same tab
+    const interval = setInterval(() => {
+      const updatedUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      if (JSON.stringify(updatedUser) !== JSON.stringify(currentUser)) {
+        setCurrentUser(updatedUser);
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
     navigate("/");

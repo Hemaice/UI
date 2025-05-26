@@ -51,33 +51,35 @@ const ProfileComponent = ({ userType, currentUser, onUpdate }: ProfileComponentP
     <div className="max-w-4xl mx-auto">
       <Card className="shadow-lg">
         <CardHeader className="text-center bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div className="flex justify-center mb-4 relative">
-            <Avatar className="w-20 h-20 cursor-pointer" onClick={handleAvatarClick}>
-              {currentUser.profileImage ? (
-                <AvatarImage src={currentUser.profileImage} alt="Profile" className="w-20 h-20" />
-              ) : (
-                <AvatarFallback className="bg-blue-500 text-white w-20 h-20 text-2xl">
-                  {initials}
-                </AvatarFallback>
-              )}
-            </Avatar>
-            <Button
+          <div className="flex justify-center mb-4 relative inline-block">
+            <div className="relative">
+              <Avatar className="w-20 h-20 cursor-pointer" onClick={handleAvatarClick}>
+                {currentUser.profileImage ? (
+                  <AvatarImage src={currentUser.profileImage} alt="Profile" className="w-20 h-20" />
+                ) : (
+                  <AvatarFallback className="bg-blue-500 text-white w-20 h-20 text-2xl">
+                    {initials}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+              <Button
                 variant="ghost"
                 size="icon"
-                className="absolute bottom-0 right-0 rounded-full"
+                className="absolute -bottom-1 -right-1 rounded-full bg-white shadow-md hover:bg-gray-50 w-8 h-8"
                 onClick={handleAvatarClick}
                 disabled={isUploading}
               >
                 <Camera className="h-4 w-4" />
                 <span className="sr-only">Upload</span>
-            </Button>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-              ref={fileInputRef}
-            />
+              </Button>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                ref={fileInputRef}
+              />
+            </div>
           </div>
           <CardTitle className="text-2xl">{currentUser.name}</CardTitle>
           <p className="text-gray-600">{currentUser.email}</p>
