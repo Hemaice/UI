@@ -1,8 +1,47 @@
-
 import AdminNavbar from "@/components/AdminNavbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
+
+interface Course {
+  id: string;
+  courseId: string;
+  name: string;
+  description: string;
+  facultyId: string;
+  facultyName: string;
+  isEnabled: boolean;
+}
 
 const CoursesPage = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  useEffect(() => {
+    const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]');
+    setCourses(savedCourses);
+  }, []);
+
+  const handleToggle = (courseId: string) => {
+    const updatedCourses = courses.map(course =>
+      course.id === courseId ? { ...course, isEnabled: !course.isEnabled } : course
+    );
+    setCourses(updatedCourses);
+    localStorage.setItem('courses', JSON.stringify(updatedCourses));
+    toast.success(`Course ${!courses.find(c => c.id === courseId)?.isEnabled ? 'enabled' : 'disabled'} successfully`);
+  };
+
+  const handleDelete = (courseId: string) => {
+    const updatedCourses = courses.filter(course => course.id !== courseId);
+    setCourses(updatedCourses);
+    localStorage.setItem('courses', JSON.stringify(updatedCourses));
+    window.dispatchEvent(new CustomEvent('coursesUpdated'));
+    toast.success("Course deleted successfully");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <AdminNavbar currentPage="/admin/courses" />
@@ -14,11 +53,52 @@ const CoursesPage = () => {
 
         <Card>
           <CardHeader>
-            <CardTitle>Courses</CardTitle>
-            <CardDescription>Course management functionality coming soon</CardDescription>
+            <CardTitle>All Courses</CardTitle>
+            <CardDescription>List of all courses created by faculty members</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-500">This page will contain course management features.</p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Course ID</TableHead>
+                  <TableHead>Course Name</TableHead>
+                  <TableHead>Faculty Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {courses.map((course) => (
+                  <TableRow key={course.id}>
+                    <TableCell>{course.courseId}</TableCell>
+                    <TableCell>{course.name}</TableCell>
+                    <TableCell>{course.facultyName}</TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={course.isEnabled}
+                        onCheckedChange={() => handleToggle(course.id)}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDelete(course.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {courses.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-4">
+                      No courses available
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       </div>
