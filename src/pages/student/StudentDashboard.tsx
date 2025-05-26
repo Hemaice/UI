@@ -2,8 +2,44 @@
 import StudentNavbar from "@/components/StudentNavbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, Calendar, Award } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const StudentDashboard = () => {
+  const [stats, setStats] = useState({
+    enrolledCourses: 0,
+    availableCourses: 0,
+    attendancePercentage: 0
+  });
+
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+
+  useEffect(() => {
+    // Get enrolled courses
+    const enrollments = JSON.parse(localStorage.getItem('enrollments') || '[]');
+    const studentEnrollments = enrollments.filter((enrollment: any) => enrollment.studentId === currentUser.id);
+    
+    // Get all active courses
+    const allCourses = JSON.parse(localStorage.getItem('courses') || '[]');
+    const activeCourses = allCourses.filter((course: any) => course.isEnabled);
+    
+    // Calculate available courses (not enrolled in)
+    const enrolledCourseIds = studentEnrollments.map((enrollment: any) => enrollment.courseId);
+    const availableCourses = activeCourses.filter((course: any) => !enrolledCourseIds.includes(course.id));
+
+    // Calculate attendance percentage (placeholder - you can implement actual attendance logic)
+    const attendanceRecords = JSON.parse(localStorage.getItem('attendance') || '[]');
+    const studentAttendance = attendanceRecords.filter((record: any) => record.studentId === currentUser.id);
+    const attendancePercentage = studentAttendance.length > 0 
+      ? Math.round((studentAttendance.filter((record: any) => record.present).length / studentAttendance.length) * 100)
+      : 0;
+
+    setStats({
+      enrolledCourses: studentEnrollments.length,
+      availableCourses: availableCourses.length,
+      attendancePercentage
+    });
+  }, [currentUser.id]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <StudentNavbar currentPage="/student/dashboard" />
@@ -22,7 +58,7 @@ const StudentDashboard = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.enrolledCourses}</div>
               <CardDescription className="text-xs text-muted-foreground">
                 Courses you're currently enrolled in
               </CardDescription>
@@ -31,30 +67,30 @@ const StudentDashboard = () => {
 
           <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Upcoming Assignments</CardTitle>
+              <CardTitle className="text-sm font-medium">Available Courses</CardTitle>
               <div className="p-2 rounded-full bg-orange-500">
                 <Calendar className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.availableCourses}</div>
               <CardDescription className="text-xs text-muted-foreground">
-                Assignments due soon
+                New courses available to enroll
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Achievements</CardTitle>
+              <CardTitle className="text-sm font-medium">Attendance Percentage</CardTitle>
               <div className="p-2 rounded-full bg-green-500">
                 <Award className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.attendancePercentage}%</div>
               <CardDescription className="text-xs text-muted-foreground">
-                Badges and certificates earned
+                Your overall attendance rate
               </CardDescription>
             </CardContent>
           </Card>

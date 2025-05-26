@@ -22,6 +22,11 @@ interface Course {
 const FacultyDashboard = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [stats, setStats] = useState({
+    totalCourses: 0,
+    activeCourses: 0,
+    totalStudents: 0
+  });
   const [formData, setFormData] = useState({
     courseId: "",
     name: "",
@@ -34,6 +39,22 @@ const FacultyDashboard = () => {
     const savedCourses = JSON.parse(localStorage.getItem('courses') || '[]');
     const facultyCourses = savedCourses.filter((course: Course) => course.facultyId === currentUser.id);
     setCourses(facultyCourses);
+
+    // Calculate stats
+    const activeCourses = facultyCourses.filter((course: Course) => course.isEnabled);
+    const enrollments = JSON.parse(localStorage.getItem('enrollments') || '[]');
+    const studentsInMyCourses = new Set();
+    
+    facultyCourses.forEach((course: Course) => {
+      const courseEnrollments = enrollments.filter((enrollment: any) => enrollment.courseId === course.id);
+      courseEnrollments.forEach((enrollment: any) => studentsInMyCourses.add(enrollment.studentId));
+    });
+
+    setStats({
+      totalCourses: facultyCourses.length,
+      activeCourses: activeCourses.length,
+      totalStudents: studentsInMyCourses.size
+    });
   }, [currentUser.id]);
 
   const handleSubmit = () => {
@@ -120,45 +141,45 @@ const FacultyDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">My Courses</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Courses</CardTitle>
               <div className="p-2 rounded-full bg-blue-500">
                 <BookOpen className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{courses.length}</div>
+              <div className="text-2xl font-bold">{stats.totalCourses}</div>
               <CardDescription className="text-xs text-muted-foreground">
-                Courses you're teaching
+                All courses you've created
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card className="hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Students</CardTitle>
+              <CardTitle className="text-sm font-medium">Active Courses</CardTitle>
               <div className="p-2 rounded-full bg-green-500">
-                <Users className="h-4 w-4 text-white" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">0</div>
-              <CardDescription className="text-xs text-muted-foreground">
-                Students enrolled in your courses
-              </CardDescription>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow duration-300">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Assignments</CardTitle>
-              <div className="p-2 rounded-full bg-purple-500">
                 <UserCheck className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{stats.activeCourses}</div>
               <CardDescription className="text-xs text-muted-foreground">
-                Pending assignments to review
+                Courses currently active
+              </CardDescription>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow duration-300">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Students</CardTitle>
+              <div className="p-2 rounded-full bg-purple-500">
+                <Users className="h-4 w-4 text-white" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.totalStudents}</div>
+              <CardDescription className="text-xs text-muted-foreground">
+                Students enrolled in your courses
               </CardDescription>
             </CardContent>
           </Card>
