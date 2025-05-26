@@ -87,11 +87,11 @@ const StudentNavbar = ({ currentPage }: StudentNavbarProps) => {
               })}
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center ml-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                  <Avatar className="h-10 w-10">
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0 hover:bg-gray-100">
+                  <Avatar className="h-10 w-10 border-2 border-gray-200">
                     {currentUser?.profileImage ? (
                       <AvatarImage src={currentUser.profileImage} alt="Profile" />
                     ) : (
